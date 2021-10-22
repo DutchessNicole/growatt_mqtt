@@ -7,7 +7,6 @@
 #include <ArduinoOTA.h>
 #include <SoftwareSerial.h>
 #include "secrets.h"
-#include "mqtt_topics.h"
 
 /******************************************************************
 Secrets, please change these in the secrets.h file
@@ -48,8 +47,9 @@ WiFiClient mqtt_wifi_client;
 PubSubClient mqtt_client(mqtt_wifi_client);
 
 SoftwareSerial sConn;
-constexpr SoftwareSerialConfig swSerialConfig = SWSERIAL_8N1;
-constexpr int IUTBITRATE = 9600;
+#define SS_RX 12
+#define SS_TX 13
+
 
 /******************************************************************
 Log debug to mqtt
@@ -78,7 +78,7 @@ Setup, only ran on application start
 *******************************************************************/
 void setup() {  
   Serial.begin(9600);
-  sConn.begin(IUTBITRATE, swSerialConfig, 15, false, 128);
+  sConn.begin(9600, SWSERIAL_8N1, SS_RX, SS_TX, false, 128);
   
   // instantiate modbusmaster with slave id 1 (growatt)
   node.begin(1, Serial);
@@ -191,7 +191,7 @@ void update_growatt() {
   log_message("Trying to read inverter..");
   
   // instantiate modbusmaster with slave id growatt
-  node.begin(slave_id_growatt, Serial);
+  node.begin(slave_id_growatt, sConn);
   
   result = node.readInputRegisters(0, 32);
   // do something with data if read is successful
