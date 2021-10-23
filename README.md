@@ -1,5 +1,10 @@
 # Growatt MQTT
 
+Forked from a fork, there is still code that needs to be cleaned up.
+Currently, inverter status (0 idle, 1 active, 3 error), actual power (Watt) and PV voltage work and tested on a Growatt MIC 1500TL-X inverter.
+
+Original read.me:
+
 _This is still a work in progress 14-09-2019._
 
 This application is build for an ESP8266, tested on NodeMCU.
