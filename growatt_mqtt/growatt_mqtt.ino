@@ -193,30 +193,24 @@ void update_growatt() {
   // instantiate modbusmaster with slave id growatt
   node.begin(slave_id_growatt, sConn);
   
-  result = node.readInputRegisters(0, 32);
+  result = node.readInputRegisters(0, 62); // Changed to max register to be parsed
   // do something with data if read is successful
   if (result == node.ku8MBSuccess){
     log_message("success!");
-    publishInt("energy/growatt/status", node.getResponseBuffer(0));
-    
-    publishFloat("energy/growatt/Ppv", glueFloat(node.getResponseBuffer(1), node.getResponseBuffer(2)));    
-    publishFloat("energy/growatt/Vpv1", glueFloat(0, node.getResponseBuffer(3)));    
-    publishFloat("energy/growatt/PV1Curr", glueFloat(0, node.getResponseBuffer(4)));    
-    publishFloat("energy/growatt/Pac", glueFloat(node.getResponseBuffer(11), node.getResponseBuffer(12)));
-    publishFloat("energy/growatt/Fac", glueFloat(0, node.getResponseBuffer(13))/10 );  
+    publishInt("energy/growatt/status", node.getResponseBuffer(0)); // inverter status 0, idle 1 production 3 error
+    publishFloat("energy/growatt/Ppv", glueFloat(node.getResponseBuffer(1), node.getResponseBuffer(2))); // Pv1 power
+    publishFloat("energy/growatt/Vpv1", glueFloat(0, node.getResponseBuffer(3)));    // Pv1 voltage
   
-    publishFloat("energy/growatt/Vac1", glueFloat(0, node.getResponseBuffer(14)));  
-    publishFloat("energy/growatt/Iac1", glueFloat(0, node.getResponseBuffer(15)));
-    publishFloat("energy/growatt/Pac1", glueFloat(node.getResponseBuffer(16), node.getResponseBuffer(17)));
-  
-    publishFloat("energy/growatt/Etoday", glueFloat(node.getResponseBuffer(26), node.getResponseBuffer(27)));
-    publishFloat("energy/growatt/Etotal", glueFloat(node.getResponseBuffer(28), node.getResponseBuffer(29)));
-    publishFloat("energy/growatt/ttotal", glueFloat(node.getResponseBuffer(30), node.getResponseBuffer(31)));
-    publishFloat("energy/growatt/Tinverter", glueFloat(0, node.getResponseBuffer(32)));
-  } else {
+    publishFloat("energy/growatt/Vac1", glueFloat(0, node.getResponseBuffer(38)));  // AC Phase 1 Voltage
+    publishFloat("energy/growatt/Iac1", glueFloat(0, node.getResponseBuffer(39))); // AC Phase 1 Ampere
+    publishFloat("energy/growatt/Pac1", glueFloat(node.getResponseBuffer(40), node.getResponseBuffer(41))); // AC Phase 1 Power
+      
+    publishFloat("energy/growatt/Eactoday", glueFloat(node.getResponseBuffer(53), node.getResponseBuffer(54))); //  Energy generated today
+    publishFloat("energy/growatt/Eactotal", glueFloat(node.getResponseBuffer(55), node.getResponseBuffer(56))); // Energy generated total
+    } else {
     tmp = String(result, HEX);
     tmp.toCharArray(value, 40);
-    
+     
     log_message("error!");
     log_message(value);
     publishInt("energy/growatt/status", -1);
