@@ -22,7 +22,7 @@ It reads values from an growatt solar power inverter, mitsubishi heat exchanger 
 
 ## Wiring
 
-You will need to use an RS485 -> TTL adapter, when using and ESP8266 make sure to use an 3.3V compatibale one. If your adapter does not have automatic TX/RX switching you will need additional wiring to pull down/up the correct pins.
+You will need to use an RS485 -> TTL adapter, when using and ESP8266 make sure to use an 3.3V compatible one. If your adapter does not have automatic TX/RX switching you will need additional wiring to pull down/up the correct pins.
 
 ESP8266 --> RS485 to TTL --> Growatt Inverter.
 
