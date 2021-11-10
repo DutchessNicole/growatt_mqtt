@@ -1,7 +1,17 @@
 # Growatt MQTT
+Currently functional on a Growatt MIC 1500TL-X inverter 
 
-Forked from a fork, there is still code that needs to be cleaned up.
-Currently, inverter status (0 idle, 1 active, 3 error), actual power (Watt) and PV voltage work and tested on a Growatt MIC 1500TL-X inverter.
+Hrdware:
+Wemos D1 
+UART TTL to RS485 Converter (Works at 3.3v TTL)
+
+Working registers:
+
+Inverter status (0 idle, 1 active, 3 error)
+Actual PV power (Watt) 
+PV voltage 
+AC variables (V, I, P) 
+Energy generated daily and total
 
 Original read.me:
 
