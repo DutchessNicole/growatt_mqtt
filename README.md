@@ -1,7 +1,7 @@
 # Growatt MQTT
 Currently functional on a Growatt MIC 1500TL-X inverter 
 
-Hrdware:
+Hardware:
 Wemos D1 
 UART TTL to RS485 Converter (Works at 3.3v TTL)
 
