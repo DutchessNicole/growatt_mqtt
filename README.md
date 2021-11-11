@@ -2,8 +2,9 @@
 Currently functional on a Growatt MIC 1500TL-X inverter 
 
 Hardware:
-- Wemos D1 
-- UART TTL to RS485 Converter (Works at 3.3v TTL)
+- Wemos D1 mini (ESP-8266EX)
+- UART 3.3v TTL to RS485 Converter
+- Some wires and solder
 - TX/Rx configuration is 13/12 (can be configured in the SoftwareSerial pin definition (SS_RX and SS_TX))
 
 ![Proto stage](/Images/Growatt_inverter.jpeg?raw=true)
@@ -11,9 +12,9 @@ Hardware:
 
 Working registers:
 
-- Inverter status (0 idle, 1 active, 3 error)
+- Inverter status (0 idle, 1 production, 3 error)
 - Actual PV power (Watt) 
-- PV Voltage 
+- PV Voltage (V)
 - AC variables (V, I, P) 
 - Energy generated daily and total (kWh)
 
