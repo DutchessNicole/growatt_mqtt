@@ -11,11 +11,11 @@ TX/Rx configuration is 13/12 (can be configured in the SoftwareSerial pin defini
 
 Working registers:
 
-Inverter status (0 idle, 1 active, 3 error)
-Actual PV power (Watt) 
-PV voltage 
-AC variables (V, I, P) 
-Energy generated daily and total
+- Inverter status (0 idle, 1 active, 3 error)
+- Actual PV power (Watt) 
+- PV Voltage 
+- AC variables (V, I, P) 
+- Energy generated daily and total (kWh)
 
 ## References
 Code structure based on: https://github.com/LukasdeBoer/esp8266-whr930-mqtt
