@@ -2,9 +2,9 @@
 Currently functional on a Growatt MIC 1500TL-X inverter 
 
 Hardware:
-Wemos D1 
-UART TTL to RS485 Converter (Works at 3.3v TTL)
-TX/Rx configuration is 13/12 (can be configured in the SoftwareSerial pin definition (SS_RX and SS_TX))
+- Wemos D1 
+- UART TTL to RS485 Converter (Works at 3.3v TTL)
+- TX/Rx configuration is 13/12 (can be configured in the SoftwareSerial pin definition (SS_RX and SS_TX))
 
 ![Proto stage](/Images/Growatt_inverter.jpeg?raw=true)
 
