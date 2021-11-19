@@ -13,4 +13,4 @@ Secret values, do not share or commit this file !
 
 #define MQTT_TOPIC_BASE "";
 #define MQTT_LOGTOPIC "";
-#define MQTT_SET_TEMPERATURE_TOPIC "";
+#define MQTT_LWT_TOPIC "";
