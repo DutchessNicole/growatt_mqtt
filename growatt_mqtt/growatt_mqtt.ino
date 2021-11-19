@@ -21,8 +21,9 @@ const int   mqtt_port                  = MQTT_PORT;
 const char* mqtt_username              = MQTT_USERNAME;
 const char* mqtt_password              = MQTT_PASSWORD;
 
-const char* mqtt_topic_base               = MQTT_TOPIC_BASE;
-const char* mqtt_logtopic                 = MQTT_LOGTOPIC;
+const char* mqtt_topic_base            = MQTT_TOPIC_BASE;
+const char* mqtt_logtopic              = MQTT_LOGTOPIC;
+const char* mqtt_lwt_topic             = MQTT_LWT_TOPIC;
 
 
 /******************************************************************
