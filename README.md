@@ -1,4 +1,4 @@
-# Growatt MQTT
+# Growatt Solar Inverter parameters to MQTT topics
 Currently functional on a Growatt MIC 1500TL-X inverter 
 
 Hardware:
