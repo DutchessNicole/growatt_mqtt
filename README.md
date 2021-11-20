@@ -28,7 +28,9 @@ If you are updating an existing configuration, make sure to define the complete 
 
 for example:
 #define MQTT_TOPIC_BASE "domoticz/energy/pv1";
+
 #define MQTT_LOG_TOPIC "log";
+
 #define MQTT_LWT_TOPIC "domoticz/energy/pv1/LWT";
 
 ## References
