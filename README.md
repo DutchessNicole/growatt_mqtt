@@ -18,5 +18,18 @@ Working registers:
 - AC variables (V, I, P) 
 - Energy generated daily and total (kWh)
 
+MQTT updates 20-11-2021:
+
+Changed MQTT_LOGTOPIC to MQTT_LOG_TOPIC
+Added LWT topic to gracefully handle the end of the production day.
+
+The topic structure is moved from the code to secrets.h
+If you are updating an existing configuration, make sure to define the complete topic structure in the MQTT_TOPIC_BASE and MQTT_LWT_TOPIC
+
+for example:
+#define MQTT_TOPIC_BASE "domoticz/energy/pv1";
+#define MQTT_LOG_TOPIC "log";
+#define MQTT_LWT_TOPIC "domoticz/energy/pv1/LWT";
+
 ## References
 Code structure based on: https://github.com/LukasdeBoer/esp8266-whr930-mqtt
