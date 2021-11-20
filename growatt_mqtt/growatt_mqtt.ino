@@ -4,7 +4,6 @@
 #include <ArduinoOTA.h>
 #include <PubSubClient.h>
 #include <ModbusMaster.h>
-#include <ArduinoOTA.h>
 #include <SoftwareSerial.h>
 #include "secrets.h"
 
@@ -22,7 +21,7 @@ const char* mqtt_username              = MQTT_USERNAME;
 const char* mqtt_password              = MQTT_PASSWORD;
 
 const char* mqtt_topic_base            = MQTT_TOPIC_BASE;
-const char* mqtt_logtopic              = MQTT_LOGTOPIC;
+const char* mqtt_log_topic              = MQTT_LOG_TOPIC;
 const char* mqtt_lwt_topic             = MQTT_LWT_TOPIC;
 
 
@@ -59,7 +58,7 @@ void log_message(char* string)
 {
   if (outputMqttLog)
   {
-    mqtt_client.publish(mqtt_logtopic, string); 
+    mqtt_client.publish(mqtt_log_topic, string); 
   } 
 }
 
@@ -159,14 +158,15 @@ void publishInt(char * topic, int i) {
 }
 
 /******************************************************************
-Reconnect to mqtt broker if connection is lost
+Reconnect to mqtt broker if connection is lost and set Last Will
 *******************************************************************/
 void mqtt_reconnect()
 {
   // Loop until we're reconnected
   while (!mqtt_client.connected()) 
   {
-    if (mqtt_client.connect(wifi_hostname, mqtt_username, mqtt_password)) {
+    if (mqtt_client.connect(wifi_hostname, mqtt_username, mqtt_password, mqtt_lwt_topic, 0, true, "offline")) {
+        mqtt_client.publish(mqtt_lwt_topic, "online");  
       // do nothing
     } else {
       // Wait 5 seconds before retrying
@@ -198,23 +198,23 @@ void update_growatt() {
   // do something with data if read is successful
   if (result == node.ku8MBSuccess){
     log_message("success!");
-    publishInt("energy/growatt/status", node.getResponseBuffer(0)); // inverter status 0, idle 1 production 3 error
-    publishFloat("energy/growatt/Ppv", glueFloat(node.getResponseBuffer(1), node.getResponseBuffer(2))); // Pv1 power
-    publishFloat("energy/growatt/Vpv1", glueFloat(0, node.getResponseBuffer(3)));    // Pv1 voltage
+    publishInt("status", node.getResponseBuffer(0)); // inverter status 0, idle 1 production 3 error
+    publishFloat("Ppv", glueFloat(node.getResponseBuffer(1), node.getResponseBuffer(2))); // Pv1 power
+    publishFloat("Vpv1", glueFloat(0, node.getResponseBuffer(3)));    // Pv1 voltage
   
-    publishFloat("energy/growatt/Vac1", glueFloat(0, node.getResponseBuffer(38)));  // AC Phase 1 Voltage
-    publishFloat("energy/growatt/Iac1", glueFloat(0, node.getResponseBuffer(39))); // AC Phase 1 Ampere
-    publishFloat("energy/growatt/Pac1", glueFloat(node.getResponseBuffer(40), node.getResponseBuffer(41))); // AC Phase 1 Power
+    publishFloat("Vac1", glueFloat(0, node.getResponseBuffer(38)));  // AC Phase 1 Voltage
+    publishFloat("Iac1", glueFloat(0, node.getResponseBuffer(39))); // AC Phase 1 Ampere
+    publishFloat("Pac1", glueFloat(node.getResponseBuffer(40), node.getResponseBuffer(41))); // AC Phase 1 Power
       
-    publishFloat("energy/growatt/Eactoday", glueFloat(node.getResponseBuffer(53), node.getResponseBuffer(54))); //  Energy generated today
-    publishFloat("energy/growatt/Eactotal", glueFloat(node.getResponseBuffer(55), node.getResponseBuffer(56))); // Energy generated total
+    publishFloat("Eactoday", glueFloat(node.getResponseBuffer(53), node.getResponseBuffer(54))); //  Energy generated today
+    publishFloat("Eactotal", glueFloat(node.getResponseBuffer(55), node.getResponseBuffer(56))); // Energy generated total
     } else {
     tmp = String(result, HEX);
     tmp.toCharArray(value, 40);
      
     log_message("error!");
     log_message(value);
-    publishInt("energy/growatt/status", -1);
+    publishInt("status", -1);
   }
   node.clearResponseBuffer();
 }
