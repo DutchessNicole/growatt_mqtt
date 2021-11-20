@@ -27,8 +27,11 @@ The topic structure is moved from the code to secrets.h
 If you are updating an existing configuration, make sure to define the complete topic structure in the MQTT_TOPIC_BASE and MQTT_LWT_TOPIC
 
 For example:
+
 #define MQTT_TOPIC_BASE "domoticz/energy/pv1";
+
 #define MQTT_LOG_TOPIC "log";
+
 #define MQTT_LWT_TOPIC "domoticz/energy/pv1/LWT";
 
 ## References
