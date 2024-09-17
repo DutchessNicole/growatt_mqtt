@@ -1,84 +1,67 @@
-# Growatt MQTT
+# Growatt Solar Inverter parameters to MQTT topics
+Currently functional on a Growatt MIC 1500TL-X inverter and MOD 9000TL3-X
 
-_This is still a work in progress 14-09-2019._
+**Hardware:**
+- Wemos D1 mini (ESP-8266EX)
+- UART 3.3v TTL to RS485 Converter
+- Some wires and solder
+- TX/Rx configuration is 13/12 (can be configured in the SoftwareSerial pin definition (SS_RX and SS_TX))
+- Most inverters provide 5v on the USB port when the inverter is online. If that does not work, 12v power supply from the inverter can be used, else you need an external power supply.
 
-This application is build for an ESP8266, tested on NodeMCU.
-It reads values from an growatt solar power inverter, mitsubishi heat exchanger and whr930 mechanical ventilation using modbus. These value are published using MQTT for use with for example Home Assistant or any other application of your preference.
+![Proto stage](/Images/Growatt_inverter.jpeg?raw=true)
 
-## Wiring
 
-You will need to use an RS485 -> TTL adapter, when using and ESP8266 make sure to use an 3.3V compatibale one. If your adapter does not have automatic TX/RX switching you will need additional wiring to pull down/up the correct pins.
+**Working registers:**
 
-ESP8266 --> RS485 to TTL --> Growatt Inverter.
+- Inverter status (0 idle, 1 production, 3 error)
+- Actual PV power (Watt) 
+- PV Voltage (V)
+- AC variables (V, I, P) 
+- Energy generated daily and total (kWh)
 
-## Home Assistant
-Use the following sensors to integrate with Home Assistant
-``` YAML
-- platform: mqtt
-  state_topic: "house/energy/growatt/status"
-  name: "Solar inverter state"
-  qos: 0
-- platform: mqtt
-  state_topic: "house/energy/growatt/Ppv"
-  name: "Solar inverter input power"
-  unit_of_measurement: W
-  qos: 0
-- platform: mqtt
-  state_topic: "house/energy/growatt/Vpv1"
-  name: "Solar inverter PV1 voltage"
-  unit_of_measurement: V
-  qos: 0
-- platform: mqtt
-  state_topic: "house/energy/growatt/PV1Curr"
-  name: "Solar inverter PV1 input current"
-  unit_of_measurement: A
-  qos: 0
-- platform: mqtt
-  state_topic: "house/energy/growatt/Pac"
-  name: "Solar inverter output power"
-  unit_of_measurement: W
-  qos: 0
-- platform: mqtt
-  state_topic: "house/energy/growatt/Fac"
-  name: "Solar inverter grid frequency"
-  unit_of_measurement: Hz
-  qos: 0
-- platform: mqtt
-  state_topic: "house/energy/growatt/Vac1"
-  name: "Solar inverter three/single phase grid voltage"
-  unit_of_measurement: v
-  qos: 0
-- platform: mqtt
-  state_topic: "house/energy/growatt/Iac1"
-  name: "Solar inverter three/single phase grid output current"
-  unit_of_measurement: A
-  qos: 0
-- platform: mqtt
-  state_topic: "house/energy/growatt/Pac1"
-  name: "Solar inverter three/single phase grid output Watt"
-  unit_of_measurement: W
-  qos: 0
-- platform: mqtt
-  state_topic: "house/energy/growatt/Etoday"
-  name: "Solar inverter total energy today"
-  unit_of_measurement: KWH
-  qos: 0
-- platform: mqtt
-  state_topic: "house/energy/growatt/Etotal"
-  name: "Solar inverter total energy"
-  unit_of_measurement: KWH
-  qos: 0
-- platform: mqtt
-  state_topic: "house/energy/growatt/ttotal"
-  name: "Solar inverter operating timet"
-  unit_of_measurement: S
-  qos: 0
-- platform: mqtt
-  state_topic: "house/energy/growatt/Tinverter"
-  name: "Solar inverter inverter temperature"
-  unit_of_measurement: C
-  qos: 0
-```
+**Register read updates 06-02-2024**
+
+Added 2nd and 3rd phase Voltage & power registers  (comment out if you have a single phase inverter)
+Changed PV and AC total power register
+Added 2nd string registers (comment out if you have a single phase inverter)
+Removed current registers
+Minor tidying up
+
+**MQTT updates 20-11-2021:**
+
+Changed MQTT_LOGTOPIC to MQTT_LOG_TOPIC
+Added LWT topic to gracefully handle the end of the production day.
+
+The topic structure is moved from the code to secrets.h
+If you are updating an existing configuration, make sure to define the complete topic structure in the MQTT_TOPIC_BASE and MQTT_LWT_TOPIC
+
+For example:
+
+#define MQTT_TOPIC_BASE "solar";
+
+#define MQTT_LOG_TOPIC "solar/log";
+
+#define MQTT_LWT_TOPIC "solar/LWT";
+
+**Home assistant custom sensor:**
+
+Adapt the state_topic of both sensors to match your MQTT_TOPIC_BASE configuration.
+
+Paste into the configuration.yaml
+
+	mqtt:
+		sensor:
+ 			- name: "Solar PvP"  
+				state_topic: "solar/PacT"
+   				state_class: "measurement"
+   				unit_of_measurement: "W"
+   	 			device_class: "power"
+			- name: "Solar1 Eactotal"
+  				state_topic: "solar/Eactotal"
+				state_class: "total"
+   				unit_of_measurement: "kWh"
+   				device_class: "energy"
+   
 
 ## References
 Code structure based on: https://github.com/LukasdeBoer/esp8266-whr930-mqtt
